@@ -3,14 +3,14 @@ require 'json'
 
 module PagesHelper
   def get_recent_posts(limit) 
-    url = "https://hn.algolia.com/api/v1/search_by_date?query=dead&tags=story"
+    url = "https://hn.algolia.com/api/v1/search_by_date?query=is%20dead&tags=story"
     resp = Net::HTTP.get_response(URI.parse(url)) 
     data = resp.body 
     JSON.parse(data)
   end
 
   def get_top_posts(limit) 
-    url = "https://hn.algolia.com/api/v1/search?query=dead&tags=story"
+    url = "https://hn.algolia.com/api/v1/search?query=is%20dead&tags=story"
     resp = Net::HTTP.get_response(URI.parse(url)) 
     data = resp.body 
     JSON.parse(data)
@@ -28,7 +28,10 @@ module PagesHelper
   end
 
   def is_dead(story)
-    story["title"].match(/is dead/)
+    if story["title"].match(/is not dead/)
+      false
+    elsif story["title"].match(/\bdead\b/)
+      true
+    end
   end
-
 end
