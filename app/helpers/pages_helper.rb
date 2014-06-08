@@ -1,5 +1,5 @@
 require 'net/http'
-require 'JSON'
+require 'json'
 
 module PagesHelper
   def get_recent_posts(limit) 
