@@ -1,0 +1,4 @@
+<h1>Recent obituaries on Hacker News</h1>
+<% @dead_stories.each do |story| %>
+  <div class="story"><%= link_to story["title"], "https://news.ycombinator.com/item?id=#{story["objectID"]}" %></div>
+<% end %>
