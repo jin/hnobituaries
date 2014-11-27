@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root to: "pages#index"
-  get "index", to: "pages#index"
+  root to: "pages#top"
+  get "recent", to: "pages#recent"
   get "top", to: "pages#top"
 end

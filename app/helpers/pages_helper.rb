@@ -2,36 +2,27 @@ require 'net/http'
 require 'json'
 
 module PagesHelper
-  def get_recent_posts(limit) 
+
+  def get_recent_posts 
     url = "https://hn.algolia.com/api/v1/search_by_date?query=is%20dead&tags=story"
-    resp = Net::HTTP.get_response(URI.parse(url)) 
-    data = resp.body 
-    JSON.parse(data)
+    parse_response Net::HTTP.get_response(URI.parse(url)) 
   end
 
-  def get_top_posts(limit) 
+  def get_top_posts 
     url = "https://hn.algolia.com/api/v1/search?query=is%20dead&tags=story"
-    resp = Net::HTTP.get_response(URI.parse(url)) 
-    data = resp.body 
-    JSON.parse(data)
+    parse_response Net::HTTP.get_response(URI.parse(url)) 
   end
 
-  def get_deaths(json)
-    dead_stories = Array.new
-    stories = json["hits"]
-    stories.each do |story|
-      if is_dead(story)
-        dead_stories << story
-      end
-    end
-    dead_stories
+  def parse_response(resp)
+    JSON.parse(resp.body)
   end
 
-  def is_dead(story)
-    if story["title"].match(/is not dead/)
-      false
-    elsif story["title"].match(/\bdead\b/)
-      true
-    end
+  def extract_obituaries(json)
+    json["hits"].keep_if { |story| is_obituary(story) }  
   end
+
+  def is_obituary(story)
+    !story["title"].match(/is not dead/) && story["title"].match(/\bdead\b/)
+  end
+
 end
